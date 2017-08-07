@@ -328,7 +328,7 @@
 	},
 	"Resources": {
 
-		"WebServerInstance": {
+		"WebServerInstance01": {
 			"Type": "AWS::EC2::Instance",
 			"Properties": {
 				"ImageId": {
@@ -436,6 +436,32 @@
 				}
 			}
 		},
+		"MyLoadBalancer": {
+			"Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+			"Properties": {
+				"AvailabilityZones": ["us-east-1a"],
+				"Instances": [{
+						"Ref": "WebServerInstance01"
+					},
+					{
+						"Ref": "WebServerInstance02"
+					}
+				],
+				"Listeners": [{
+					"LoadBalancerPort": "80",
+					"InstancePort": "80",
+					"Protocol": "HTTP"
+				}],
+
+				"HealthCheck": {
+					"Target": "HTTP:80/",
+					"HealthyThreshold": "3",
+					"UnhealthyThreshold": "5",
+					"Interval": "30",
+					"Timeout": "5"
+				}
+			}
+		},
 
 		"WebServerSecurityGroup": {
 			"Type": "AWS::EC2::SecurityGroup",
@@ -463,13 +489,25 @@
 	},
 
 	"Outputs": {
-		"WebsiteURL": {
+		"WebsiteURL1": {
 			"Description": "URL for newly created Apache server",
 			"Value": {
 				"Fn::Join": ["", ["http://", {
-					"Fn::GetAtt": ["WebServerInstance", "PublicDnsName"]
+					"Fn::GetAtt": ["WebServerInstance01", "PublicDnsName"]
 				}]]
 			}
-		}
+		},
+		"WebsiteURL2": {
+			"Description": "URL for newly created Apache server",
+			"Value": {
+				"Fn::Join": ["", ["http://", {
+					"Fn::GetAtt": ["WebServerInstance02", "PublicDnsName"]
+				}]]
+			}
+		},
+		"URL" : {
+      "Description" : "URL of the sample website",
+      "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : [ "MyLoadBalancer", "DNSName" ]}]]}
+    }
 	}
 }
