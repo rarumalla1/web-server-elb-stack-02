@@ -357,27 +357,7 @@
 							"#!/bin/bash -xe\n",
 							"yum update -y aws-cfn-bootstrap\n",
 							"yum install -y httpd || error_exit 'Failed to install Apache' \n",
-							"/sbin/service httpd start || error_exit 'Failed to start Apache' \n",
-							"# Install the files and packages from the metadata\n",
-							"/opt/aws/bin/cfn-init -v ",
-							"         --stack ", {
-								"Ref": "AWS::StackName"
-							},
-							"         --resource WebServerInstance ",
-							"         --configsets InstallAndRun ",
-							"         --region ", {
-								"Ref": "AWS::Region"
-							}, "\n",
-
-							"# Signal the status from cfn-init\n",
-							"/opt/aws/bin/cfn-signal -e $? ",
-							"         --stack ", {
-								"Ref": "AWS::StackName"
-							},
-							"         --resource WebServerInstance ",
-							"         --region ", {
-								"Ref": "AWS::Region"
-							}, "\n"
+							"/sbin/service httpd start || error_exit 'Failed to start Apache' \n"
 						]]
 					}
 				}
@@ -411,27 +391,8 @@
 						"Fn::Join": ["", [
 							"#!/bin/bash -xe\n",
 							"yum update -y aws-cfn-bootstrap\n",
-
-							"# Install the files and packages from the metadata\n",
-							"/opt/aws/bin/cfn-init -v ",
-							"         --stack ", {
-								"Ref": "AWS::StackName"
-							},
-							"         --resource WebServerInstance02 ",
-							"         --configsets InstallAndRun ",
-							"         --region ", {
-								"Ref": "AWS::Region"
-							}, "\n",
-
-							"# Signal the status from cfn-init\n",
-							"/opt/aws/bin/cfn-signal -e $? ",
-							"         --stack ", {
-								"Ref": "AWS::StackName"
-							},
-							"         --resource WebServerInstance02 ",
-							"         --region ", {
-								"Ref": "AWS::Region"
-							}, "\n"
+							"yum install -y httpd || error_exit 'Failed to install Apache' \n",
+							"/sbin/service httpd start || error_exit 'Failed to start Apache' \n"
 						]]
 					}
 				}
